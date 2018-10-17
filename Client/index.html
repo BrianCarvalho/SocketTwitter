@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stream twitter</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<style type="text/css">
+    body{
+        width: 50%;
+        padding-left: 22.5%;
+    }
+    h1{
+        text-align: center;
+    }
+</style>
+<body>
+<h1>Stream twitter #Javascript</h1>
+
+<form id="formulaire">
+    Rechercher:<br>
+    <input type="text" id='search'><br>
+    <input type="submit" id="send">
+</form>
+
+<div id="tweets"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+// Connection a socket et affichage des tweets
+    var socket = io.connect('/'),
+    tweets = document.getElementById('tweets');
+
+    document.getElementById('formulaire').addEventListener('submit', function(event) {
+        var rechercherTwitt = document.getElementById('search').value;
+        event.preventDefault();
+        console.log(rechercherTwitt);
+        socket.emit('rechercher', rechercherTwitt);
+    });
+      
+
+socket.on('newTwit', function (event) {
+
+      
+
+    //div content contient les autres div 
+        var divcontent = document.createElement('div');
+        divcontent.setAttribute('class', 'contentStyle');
+    
+    //div img + create img + style class
+        var divImg = document.createElement('div')
+        var imgHtml = document.createElement('img');
+        imgHtml.setAttribute('src',event.user.profile_image_url_https);
+        divImg.setAttribute('class', 'styleImg');
+        
+   
+    //div h3
+        var divh3 = document.createElement('div');
+        var h3Html = document.createElement('h3');
+        h3Html.innerHTML = event.text;
+
+    // Creation de 'p' pour la date
+        var divDate = document.createElement('div');
+        var dateHtml = document.createElement('p');
+        dateHtml.innerHTML = event.created_at;
+
+    //Regrouper la div avec l'element 
+        divh3.appendChild(h3Html);
+        divImg.appendChild(imgHtml);
+        divDate.appendChild(dateHtml);
+
+    //mettre dans la div content
+        divcontent.appendChild(divImg);
+        divcontent.appendChild(divh3);
+        divcontent.appendChild(divDate);
+    
+    //Mettre dans la Div principal
+        tweets.appendChild(divcontent);
+        
+        
+
+    
+
+});
+
+
+</script>
+
+</body>
+</html>
