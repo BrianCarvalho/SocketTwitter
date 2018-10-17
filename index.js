@@ -3,13 +3,17 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-var Twitter = require('twitter');
-var client = new Twitter({
+var Twit = require('twit');
+var client = new Twit({
     consumer_key: 'ZDlB334dL0YQNjFf2JyFn9kd1',
     consumer_secret: 'NDmhOrHXwbnKjj8yBMYiDqPENl7MLbGiHXGOK4ifmpAb6JmLXV',
-    access_token_key: '1049279921904910337-XmJHTqQ9cJxqW2baAApa1qKekL6uAf',
-    access_token_secret: 'KNSiXWXdc63FGwicyDDfKGE4RtpgY01MtULG7mzlvmhRP'
+    access_token: '1049279921904910337-XmJHTqQ9cJxqW2baAApa1qKekL6uAf',
+    access_token_secret: 'KNSiXWXdc63FGwicyDDfKGE4RtpgY01MtULG7mzlvmhRP',
+    timeout_ms : 60*100,
+    strictSSL: true,
 });
+
+var stream = client.stream('statuses/filter', { track: "bonjour"})
 
 // je déclare mes fichiers statiques
 app.use('/app', express.static('./client/app'));
@@ -24,29 +28,16 @@ server.listen(3000, function() {
 });
 //connexion au socket
 io.sockets.on('connection', function (socket) {
-    console.log("un client est connecté");
-    socket.emit('monsocket', { hello: "world" });
-
-    socket.on('rechercher',function(rechercherTwitt){
-        console.log(rechercherTwitt);
-        // You can also get the stream in a callback if you prefer.
-
-        client.stream('statuses/filter', {track: rechercherTwitt}, function(stream) {
-        
-            
-            stream.on('data', function(event) {
-                //console.log(event& event_text);
-                console.log(event);
-                io.sockets.emit('newTwit', event);
-
-                
-            });
-            stream.on('error', function(error) {
-                throw error;
-            });
-            
+    socket.on('rechercher', function(rechercherTwitt){
+        stream.stop();
+        stream = client.stream('statuses/filter', { track: rechercherTwitt });
+    
+        stream.on('tweet', function (tweet) {
+            io.sockets.emit('newTwit', tweet);
+            console.log(tweet);
         });
-    });
+    
+        })
 });
 
 

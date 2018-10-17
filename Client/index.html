@@ -4,15 +4,6 @@
     <title>Stream twitter</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
-<style type="text/css">
-    body{
-        width: 50%;
-        padding-left: 22.5%;
-    }
-    h1{
-        text-align: center;
-    }
-</style>
 <body>
 <h1>Stream twitter #Javascript</h1>
 
@@ -32,6 +23,7 @@
     tweets = document.getElementById('tweets');
 
     document.getElementById('formulaire').addEventListener('submit', function(event) {
+        tweets.innerHTML = '';
         var rechercherTwitt = document.getElementById('search').value;
         event.preventDefault();
         console.log(rechercherTwitt);
@@ -57,25 +49,39 @@ socket.on('newTwit', function (event) {
     //div h3
         var divh3 = document.createElement('div');
         var h3Html = document.createElement('h3');
+        divh3.setAttribute('class', 'divh3style');
         h3Html.innerHTML = event.text;
 
     // Creation de 'p' pour la date
         var divDate = document.createElement('div');
         var dateHtml = document.createElement('p');
+        divDate.setAttribute('class', 'divDatestyle');
         dateHtml.innerHTML = event.created_at;
+
+    //creation de 'h2' pour nom de celui qui tweet
+        var h2Html = document.createElement('h5');
+        h2Html.innerHTML = event.user.name;
+        h2Html.setAttribute('id','lien');
+        //document.getElementById('lien').innerHTML = '<a href ="http://twitter.com/"' + event.user.screen_name + '</a>';
+        
 
     //Regrouper la div avec l'element 
         divh3.appendChild(h3Html);
+        divImg.appendChild(h2Html);
         divImg.appendChild(imgHtml);
         divDate.appendChild(dateHtml);
+        
 
     //mettre dans la div content
         divcontent.appendChild(divImg);
         divcontent.appendChild(divh3);
         divcontent.appendChild(divDate);
+        
     
     //Mettre dans la Div principal
         tweets.appendChild(divcontent);
+        console.log(event);
+        
         
         
 

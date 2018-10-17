@@ -8,8 +8,28 @@
 }
 
 .styleImg {
-    display: flex;
+    width: 10%;
     justify-content: center;
     align-items: center;
     margin: 10px;
+}
+
+.stylename{
+    color: red;
+}
+
+.divh3style{
+    width:80%;
+}
+
+.divDatestyle{
+    width:10%;
+}
+
+#formulaire {
+    margin-left: 43%;
+}
+
+h1{
+    text-align: center;
 }
