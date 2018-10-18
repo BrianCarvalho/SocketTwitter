@@ -59,15 +59,21 @@ socket.on('newTwit', function (event) {
         dateHtml.innerHTML = event.created_at;
 
     //creation de 'h2' pour nom de celui qui tweet
-        var h2Html = document.createElement('h5');
-        h2Html.innerHTML = event.user.name;
-        h2Html.setAttribute('id','lien');
-        //document.getElementById('lien').innerHTML = '<a href ="http://twitter.com/"' + event.user.screen_name + '</a>';
+        var h5Html = document.createElement('h5');
+        h5Html.setAttribute('id','lien');
+
+        var a = document.createElement('a');
+        var linkText = document.createTextNode(event.user.screen_name);
         
+        a.title = "tempo";
+        a.href = "https://twitter.com/" + event.user.screen_name;
+       
 
     //Regrouper la div avec l'element 
         divh3.appendChild(h3Html);
-        divImg.appendChild(h2Html);
+        divImg.appendChild(h5Html);
+        a.appendChild(linkText);
+        h5Html.appendChild(a);
         divImg.appendChild(imgHtml);
         divDate.appendChild(dateHtml);
         
